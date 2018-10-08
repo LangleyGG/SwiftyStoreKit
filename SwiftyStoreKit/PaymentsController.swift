@@ -72,7 +72,7 @@ class PaymentsController: TransactionController {
 
         let transactionState = transaction.transactionState
 
-        if transactionState == .purchased {
+        if transactionState == .purchased || transactionState == .restored {
             let purchase = PurchaseDetails(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, product: payment.product, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !payment.atomically)
             
             payment.callback(.purchased(purchase: purchase))
@@ -92,9 +92,6 @@ class PaymentsController: TransactionController {
             return true
         }
 
-        if transactionState == .restored {
-            print("Unexpected restored transaction for payment \(transactionProductIdentifier)")
-        }
         return false
     }
 
